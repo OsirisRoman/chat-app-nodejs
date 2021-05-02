@@ -6,6 +6,8 @@ const session = require("express-session");
 const MongoDBStore = require("connect-mongodb-session")(session);
 const csrf = require("csurf");
 const flash = require("connect-flash");
+const http = require("http");
+const socketio = require("socket.io");
 
 const indexRouter = require("./routes/index");
 const authRoutes = require("./routes/auth");
@@ -19,6 +21,19 @@ const User = require("./models/user");
 const { MONGODB_URI } = require("./constants");
 
 const app = express();
+
+/**
+ * Create HTTP server.
+ */
+
+const server = http.createServer(app);
+
+/**
+ * Create Socket IO server on the top of the http server.
+ */
+
+const io = socketio(server);
+
 const store = new MongoDBStore({
   uri: MONGODB_URI,
   collection: "sessions",
@@ -97,4 +112,4 @@ app.use(function (err, req, res, next) {
   });
 });
 
-module.exports = app;
+module.exports = { app, server };
