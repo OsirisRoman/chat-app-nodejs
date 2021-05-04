@@ -24,15 +24,29 @@ const loginEmailValidation = body("email")
           if (!doMatch) {
             return Promise.reject("Invalid email or password");
           } else {
-            req.session.user = userDoc._id;
+            req.session.userId = userDoc._id;
+            req.session.username = userDoc.username;
           }
         });
     });
   });
 
-const usernameValidation = body("name")
+const nameValidation = body("name")
   .isLength({ min: 1 })
-  .withMessage("User name can't be empty.");
+  .withMessage("Name can't be empty.");
+
+const usernameValidation = body("username")
+  .isLength({ min: 1 })
+  .withMessage("UserName can't be empty.")
+  .custom((value, { req }) => {
+    return User.findOne({ username: value }).then(userDoc => {
+      if (userDoc) {
+        return Promise.reject(
+          "This username is already in use, please pickup a different one"
+        );
+      }
+    });
+  });
 
 const emailNonExistanceValidation = body("email")
   .isEmail()
@@ -79,7 +93,10 @@ router.get("/signup", authController.getSignup);
 
 router.post(
   "/signup",
-  //checks non empty username
+  //checks non empty name
+  nameValidation,
+  //checks non empty UserName
+  //checks UserName non-existance
   usernameValidation,
   //checks email to be a valid email,
   //checks email non-existance

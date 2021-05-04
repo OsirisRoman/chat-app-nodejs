@@ -14,6 +14,8 @@
                 <input type="hidden" name="_csrf" value="<%= csrfToken %>"/>
                 <label for="name">Name</label>
                 <input type="text" name="name" id="name" <%if(errors.find(error => error.param === 'name')){%>class="invalid"<%}%> <%if(oldValues){%>value="<%=oldValues.name%>"<%}%>/>
+                <label for="username">UserName</label>
+                <input type="text" name="username" id="username" <%if(errors.find(error => error.param === 'username')){%>class="invalid"<%}%> <%if(oldValues){%>value="<%=oldValues.username%>"<%}%>/>
                 <label for="email">E-Mail</label>
                 <input type="email" name="email" id="email" <%if(errors.find(error => error.param === 'email')){%>class="invalid"<%}%> <%if(oldValues){%>value="<%=oldValues.email%>"<%}%>/>
                 <label for="password">Password</label>

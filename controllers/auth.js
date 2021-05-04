@@ -51,6 +51,9 @@ const postLogout = (req, res, next) => {
 };
 
 const getSignup = (req, res, next) => {
+  if (req.session.isLoggedIn) {
+    return res.redirect("/");
+  }
   res.render("auth/signup", {
     path: "/signup",
     pageTitle: "Signup Page",
@@ -77,12 +80,7 @@ const postSignup = (req, res, next) => {
   bcrypt
     .hash(req.body.password, 12)
     .then(hashedPassword => {
-      const user = new User({
-        name: req.body.name,
-        email: req.body.email,
-        password: hashedPassword,
-        cart: [],
-      });
+      const user = new User({ ...req.body, password: hashedPassword });
       return user.save();
     })
     .then(() => res.redirect("/login"))

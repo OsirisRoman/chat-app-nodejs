@@ -8,6 +8,9 @@ const csrf = require("csurf");
 const flash = require("connect-flash");
 const http = require("http");
 const socketio = require("socket.io");
+sharedSession = require("express-socket.io-session");
+
+const ConnectedUsers = require("./socketClasses/connected-users");
 
 const indexRouter = require("./routes/index");
 const authRoutes = require("./routes/auth");
@@ -19,6 +22,18 @@ const authRoutes = require("./routes/auth");
 const connect = require("./utils/dbConnection");
 const User = require("./models/user");
 const { MONGODB_URI } = require("./constants");
+
+const store = new MongoDBStore({
+  uri: MONGODB_URI,
+  collection: "sessions",
+});
+
+const sessionMiddleware = session({
+  secret: "my secret",
+  resave: false,
+  saveUninitialized: false,
+  store,
+});
 
 const app = express();
 
@@ -34,11 +49,6 @@ const server = http.createServer(app);
 
 const io = socketio(server);
 
-const store = new MongoDBStore({
-  uri: MONGODB_URI,
-  collection: "sessions",
-});
-
 const csfrProtection = csrf();
 
 // view engine setup
@@ -51,14 +61,13 @@ app.use(express.urlencoded({ extended: false }));
 app.use(cookieParser());
 app.use(express.static(path.join(__dirname, "public")));
 
-app.use(
-  session({
-    secret: "my secret",
-    resave: false,
-    saveUninitialized: false,
-    store,
-  })
-);
+app.use(sessionMiddleware);
+// This io middleware sync the req.session object with
+// the socketClient.handshake.session object in order to share
+// the same session between express and socket.io.
+// The Id of the session at the mongo store can be found
+// as the socketClient.handshake.sessionID
+io.use(sharedSession(sessionMiddleware), { autoSave: true });
 
 app.use(csfrProtection);
 app.use(flash());
@@ -67,23 +76,6 @@ app.use((req, res, next) => {
   res.locals.isAuthenticated = req.session.isLoggedIn;
   res.locals.csrfToken = req.csrfToken();
   next();
-});
-
-app.use((req, res, next) => {
-  if (!req.session.user) {
-    return next();
-  }
-  const userID = req.session.user;
-  User.findById(userID)
-    .then(user => {
-      req.user = user;
-      next();
-    })
-    .catch(err => {
-      const error = new Error(err);
-      error.httpStatusCode = 500;
-      return next(error);
-    });
 });
 
 app.use("/", indexRouter);
@@ -109,6 +101,67 @@ app.use(function (err, req, res, next) {
   res.render("500ServerError", {
     pageTitle: "Error!",
     path: "",
+  });
+});
+
+const connectedUsers = new ConnectedUsers();
+
+/*
+* La idea ahora es enviarle un mensaje a los sockets 
+del mismo usuario que se encuentran en el mismo canal 
+para que recarguen sus pestañas.
+*/
+
+io.on("connection", socketClient => {
+  //Store all active connections for a given user
+  // const sessionID = (socketClient.sessionID = socketClient.handshake.sessionID);
+  // const username = (socketClient.username =
+  //   socketClient.handshake.session.username);
+  const sessionID = socketClient.handshake.sessionID;
+  const username = socketClient.handshake.session.username;
+
+  socketClient.join(sessionID);
+
+  socketClient.on("chatEntering", () => {
+    if (!connectedUsers.getUser(sessionID)) {
+      // Just add new sessions to the connected Users list
+      connectedUsers.addUser(sessionID, username);
+      socketClient.broadcast.emit("actualUsers", connectedUsers.getAllUsers());
+    }
+  });
+
+  // socketClient.on("roomJoinedSuccessfully", () => {
+  //   if (!connectedUsers.getUser(sessionID)) {
+  //     // Just add new sessions to the connected Users list
+  //     connectedUsers.addUser(sessionID, username);
+  //     socketClient.broadcast.emit("actualUsers", connectedUsers.getAllUsers());
+  //   }
+  // });
+
+  socketClient.on("disconnect", async () => {
+    socketClient.to(sessionID).emit("checkLogout");
+
+    // get all sockets for a given session
+    const matchingSockets = await io.in(sessionID).allSockets();
+    // check if all sockets are closes for a given session
+    const isDisconnected = matchingSockets.size === 0;
+    console.log("total socket in session channel: ", matchingSockets.size);
+    if (isDisconnected) {
+      // notify other users about the user disconnection
+      socketClient.broadcast.emit("sendMessage", {
+        user: "SERVER",
+        message: `${username} left the chat`,
+      });
+      connectedUsers.removeUser(sessionID);
+      console.log("El usuario se ha desconectado");
+    }
+  });
+
+  socketClient.on("privateMessage", data => {
+    socketClient.to(data.user).to(sessionID).emit("privateMessage", {
+      username,
+      message: data.message,
+    });
   });
 });
 
