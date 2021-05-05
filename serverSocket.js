@@ -1,6 +1,8 @@
 const socketIO = require("socket.io");
 const sharedSession = require("express-socket.io-session");
 
+const Chatroom = require("./models/chatroom");
+
 const ConnectedUsers = require("./socketClasses/connected-users");
 
 const connectedUsers = new ConnectedUsers();
@@ -73,6 +75,10 @@ para que recarguen sus pestañas.
     });
 
     socketClient.on("privateMessage", data => {
+      // Chatroom.findOne({name: chatroom}).then(chatroomDoc => {
+      //   chatroomDoc.messages.push({userId: userId, message: data.message, date: Date.now()});
+      //   chatroomDoc.save()
+      // })
       socketClient.to(data.user).to(sessionID).emit("privateMessage", {
         username,
         message: data.message,

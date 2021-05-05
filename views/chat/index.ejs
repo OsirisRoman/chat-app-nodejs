@@ -3,8 +3,26 @@
   <%- include('../includes/navigation.ejs') %>
     <main>
       <p>Welcome to <%= pageTitle %>, <%= author %>.</p>
+      <p>Please join to any of the chat rooms and enjoy!</p>
+
+      <div class="grid">
+        <% for (let room of chatrooms){ %>
+        <article class="card room-item">
+          <header class="card__header">
+            <h1 class="room__title"><%= room.name %></h1>
+          </header>
+          <div class="card__image" <% if(isAuthenticated) {%> onclick="location.href='/room/<%= room.name %>'" <% } %> >
+            <img
+              src="<%= room.imageUrl %>"
+              alt="<%= room.name %>"
+            />
+          </div>
+          <div class="card__actions">
+            <a class="btn" href="/room/<%= room.name %>">Join</a>
+          </div>
+        </article>
+        <% } %>
+      </div>
     </main>
 
-    <script src="/socket.io/socket.io.js"></script>
-    <script  src="/javascripts/client-socket.js"></script>
   <%- include('../includes/end.ejs') %>

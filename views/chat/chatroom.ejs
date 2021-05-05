@@ -1,0 +1,11 @@
+<%- include('../includes/head.ejs') %>
+
+  <%- include('../includes/navigation.ejs') %>
+    <main>
+      <p>Welcome to <%= pageTitle %>, <%= author %>.</p>
+      <p>Chat with other users about <%= pageTitle %> and enjoy!</p>
+    </main>
+
+    <script src="/socket.io/socket.io.js"></script>
+    <script  src="/javascripts/client-socket.js"></script>
+  <%- include('../includes/end.ejs') %>

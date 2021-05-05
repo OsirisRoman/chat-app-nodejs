@@ -7,4 +7,6 @@ const isAuth = require("../middleware/is-auth");
 /* GET home/chat-rooms page. */
 router.get("/", isAuth, homeController.getHome);
 
+router.get("/room/:roomName", homeController.getChatroom);
+
 module.exports = router;
