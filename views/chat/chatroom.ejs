@@ -1,10 +1,105 @@
 <%- include('../includes/head.ejs') %>
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css" integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous">
+
+    <!-- Page CSS -->
+    <link href="/css/chat-app-page.css" rel="stylesheet">
+    <!-- Custom CSS -->
+    <link href="/css/style.css" rel="stylesheet">
+    <link href="/css/chat.css" rel="stylesheet">
+    <link href="/css/animate.css" rel="stylesheet">
+
+    <link rel="stylesheet" href="/css/main.css" />
 
   <%- include('../includes/navigation.ejs') %>
     <main>
-      <p>Welcome to <%= pageTitle %>, <%= author %>.</p>
-      <p>Chat with other users about <%= pageTitle %> and enjoy!</p>
-    </main>
+
+        <!-- ============================================================== -->
+        <!-- Start Page Content -->
+        <!-- ============================================================== -->
+        <div class="row animated fadeIn">
+            <div class="col-12">
+                <div class="card m-b-0">
+                    <!-- .chat-row -->
+                    <div class="chat-main-box">
+                        <!-- .chat-left-panel -->
+                        <div class="chat-left-aside">
+                            <div class="open-panel"><i class="ti-angle-right"></i></div>
+                            <div class="chat-left-inner">
+                                <div class="form-material">
+                                    <input class="form-control p-20" type="text" placeholder="Buscar Contacto" disabled="true">
+                                </div>
+                                <ul class="chatonline style-none user-list" id="divUsuarios">
+                                        <li>
+                                            <a class="active">
+                                                Chatroom Users
+                                            </a>
+                                        </li>
+                                    <% for (let user of room.onlineUsers){ %>
+                                        <li>
+                                            <a href="#">
+                                                <span><%= user %> <small class="text-success">online</small></span>
+                                            </a>
+                                        </li>
+                                    <% } %>
+                                    <li class="p-20"></li>
+                                </ul>
+                            </div>
+                        </div>
+                        <!-- .chat-left-panel -->
+                        <!-- .chat-right-panel -->
+                        <div class="chat-right-aside">
+                            <div>
+                                <div class="p-20 b-b">
+                                    <h3><%= room.name %> <small>Chat room</small></h3>
+                                </div>
+                            </div>
+        
+                            <div class="chat-rbox">
+                                <ul class="chat-list p-20" id="divChatbox">
+                                    <% for (let message of room.messages){ %>
+                                        <%if(message.username !== username){%>
+                                            <!--chat Row -->
+                                            <li>
+                                                <div class="chat-content">
+                                                    <h5><%=message.username%><p class="chat-time mb-0"><%=message.date%></p></h5>
+                                                    <div class="box bg-light-info"><%=message.message%></div>
+                                                </div>
+                                            </li>
+                                        <%} else {%>
+                                            <!--chat Row -->
+                                            <li class="reverse">
+                                                <div class="chat-content">
+                                                    <div class="box bg-light-inverse"><%=message.message%></div>
+                                                </div>
+                                                <div class="chat-time"><%=message.date%></div>
+                                            </li>
+                                        <%}%>
+                                            <!--chat Row -->
+                                    <% } %>
+                                </ul>
+                            </div>
+                            <div class="card-body b-t">
+                                <div class="row">
+                                    <div class="col-8">
+                                        <textarea placeholder="Escribe tu mensaje aquí" class="form-control b-0"></textarea>
+                                    </div>
+                                    <div class="col-4 text-right">
+                                        <button type="button" class="btn btn-info btn-circle btn-lg"><i class="fa fa-paper-plane-o"></i> </button>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <!-- .chat-right-panel -->
+                    </div>
+                    <!-- /.chat-row -->
+                </div>
+            </div>
+        </div>
+        <!-- ============================================================== -->
+        <!-- End PAge Content -->
+        <!-- ============================================================== -->
+                
+    </main> 
 
     <script src="/socket.io/socket.io.js"></script>
     <script  src="/javascripts/client-socket.js"></script>

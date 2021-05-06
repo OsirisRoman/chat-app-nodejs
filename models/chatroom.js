@@ -13,9 +13,8 @@ const chatroomSchema = new Schema({
   },
   messages: [
     {
-      userId: {
-        type: Schema.Types.ObjectId,
-        ref: "User",
+      username: {
+        type: String,
         required: true,
       },
       message: {
@@ -28,6 +27,7 @@ const chatroomSchema = new Schema({
       },
     },
   ],
+  onlineUsers: [String],
 });
 
 module.exports = mongoose.model("Chatroom", chatroomSchema);

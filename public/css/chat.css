@@ -1,0 +1,29 @@
+textarea {
+  width: 100%;
+}
+
+.chat-list {
+  overflow-y: scroll;
+  -webkit-overflow-scrolling: touch;
+  height: 360px !important;
+}
+
+.user-list {
+  overflow-y: scroll;
+  -webkit-overflow-scrolling: touch;
+  height: 455px !important;
+}
+
+@media (min-width: 768px) {
+  .chat-list {
+    overflow-y: scroll;
+    -webkit-overflow-scrolling: touch;
+    height: 335px !important;
+  }
+
+  .user-list {
+    overflow-y: scroll;
+    -webkit-overflow-scrolling: touch;
+    height: 430px !important;
+  }
+}
