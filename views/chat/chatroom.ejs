@@ -60,7 +60,8 @@
         
                             <div class="chat-rbox">
                                 <ul class="chat-list p-20" id="divChatbox">
-                                    <% for (let message of room.messages){ %>
+                                    <!--  Render the last 50 messages  -->
+                                    <% for (let message of room.messages.slice(-50)){ %>
                                         <%if(message.username !== username){%>
                                             <!--chat Row -->
                                             <li>

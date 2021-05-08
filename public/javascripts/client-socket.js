@@ -17,14 +17,20 @@ textarea.addEventListener("keydown", e => {
 //the last message is visible.
 const scrollToEnd = () => {
   //Get the position of the last added element
-  const topPos = document.getElementsByClassName("chat-list")[0].lastChild
-    .offsetTop;
+  const topPos = document.getElementsByClassName("chat-list")[0]
+    .lastElementChild.offsetTop;
   //Scroll the messages at the last added element position
   document.getElementsByClassName("chat-list")[0].scrollTop = topPos;
 };
 
 //Adding the sent/received message to the DOM
 const renderMessageAtDOM = (username, message, messageDate) => {
+  const chatLength = document.querySelectorAll(".chat-list li").length;
+
+  //Render the last 50 messages
+  if (chatLength >= 50) {
+    document.querySelector(".chat-list li").remove();
+  }
   /*
    * Adding the message Html element to the actual view
    */
@@ -131,6 +137,15 @@ const removeOnlineUser = ({ username, messageDate }) => {
   //Always scroll the messages view to the end after a user left the chat
   scrollToEnd();
 };
+
+// Listening in case the user logout
+// from another session tab
+socket.on("connect", () => {
+  const liArray = document.querySelectorAll(".chat-list li");
+  if (liArray.length !== 0) {
+    scrollToEnd();
+  }
+});
 
 // Listening in case the user logout
 // from another session tab
