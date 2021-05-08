@@ -5,13 +5,13 @@ textarea {
 .chat-list {
   overflow-y: scroll;
   -webkit-overflow-scrolling: touch;
-  height: 360px !important;
+  height: 290px !important;
 }
 
 .user-list {
   overflow-y: scroll;
   -webkit-overflow-scrolling: touch;
-  height: 455px !important;
+  height: 395px !important;
 }
 
 @media (min-width: 768px) {

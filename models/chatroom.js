@@ -21,8 +21,8 @@ const chatroomSchema = new Schema({
         type: String,
         required: true,
       },
-      date: {
-        type: Date,
+      messageDate: {
+        type: String,
         required: true,
       },
     },

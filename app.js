@@ -11,7 +11,6 @@ const serverSocket = require("./serverSocket");
 
 const indexRouter = require("./routes/index");
 const authRoutes = require("./routes/auth");
-const seedChatrooms = require("./utils/seedChatrooms");
 
 /**
  * Database connection.
@@ -19,45 +18,6 @@ const seedChatrooms = require("./utils/seedChatrooms");
 
 const connect = require("./utils/dbConnection");
 const User = require("./models/user");
-
-/**
- * Create/Restore Chatrooms with the server .
- */
-
-let chatRooms = [
-  {
-    name: "MongoDB",
-    imageUrl:
-      "https://infinapps.com/wp-content/uploads/2018/10/mongodb-logo.png",
-  },
-  {
-    name: "ExpressJS",
-    imageUrl:
-      "https://manticore-labs.com/wp-content/uploads/2019/02/express.png",
-  },
-  {
-    name: "ReactJS",
-    imageUrl:
-      "https://upload.wikimedia.org/wikipedia/commons/thumb/4/47/React.svg/800px-React.svg.png",
-  },
-  {
-    name: "NodeJS",
-    imageUrl:
-      "https://upload.wikimedia.org/wikipedia/commons/thumb/d/d9/Node.js_logo.svg/590px-Node.js_logo.svg.png",
-  },
-  {
-    name: "MERN",
-    imageUrl:
-      "https://upload.wikimedia.org/wikipedia/commons/thumb/9/94/MERN-logo.png/800px-MERN-logo.png",
-  },
-  {
-    name: "Socket.io",
-    imageUrl:
-      "https://image.codeforgeek.com/wp-content/uploads/2018/11/socket.io_.png",
-  },
-];
-
-seedChatrooms(chatRooms);
 
 /**
  * Create collection where sessions will stored.
@@ -124,7 +84,7 @@ app.use(function (req, res, next) {
 // error handler
 app.use(function (err, req, res, next) {
   // set locals, only providing error in development
-  console.log(err);
+  //console.log(err);
   res.locals.message = err.message;
   res.locals.error = req.app.get("env") === "development" ? err : {};
 
@@ -133,6 +93,7 @@ app.use(function (err, req, res, next) {
   res.render("500ServerError", {
     pageTitle: "Error!",
     path: "",
+    isAuthenticated: req.session.isLoggedIn,
   });
 });
 
