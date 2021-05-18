@@ -21,7 +21,7 @@ input::-webkit-inner-spin-button {
 }
 .form-control input:focus,
 .form-control textarea:focus {
-  outline-color: #00695c;
+  outline-color: #3e00a1;
 }
 
 .form-control input.invalid,
@@ -30,14 +30,14 @@ input::-webkit-inner-spin-button {
 }
 button {
   font: inherit;
-  border: 1px solid #3e00a1;
-  color: #3e00a1;
+  border: 1px solid mediumblue;
+  color: mediumblue;
   background: white;
   border-radius: 3px;
   cursor: pointer;
 }
 button:hover,
 button:active {
-  background: #3e00a1;
+  background: mediumblue;
   color: white;
 }

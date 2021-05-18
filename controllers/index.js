@@ -7,7 +7,7 @@ const getHome = (req, res, next) => {
       imageUrl: room.imageUrl,
     }));
     res.render("chat/index", {
-      pageTitle: "Express",
+      pageTitle: "DEVchat",
       path: "/",
       author: req.session.username,
       chatrooms,

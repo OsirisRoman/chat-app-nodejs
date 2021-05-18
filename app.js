@@ -8,22 +8,30 @@ const csrf = require("csurf");
 const flash = require("connect-flash");
 const http = require("http");
 const serverSocket = require("./serverSocket");
+require("dotenv").config();
 
 const indexRouter = require("./routes/index");
 const authRoutes = require("./routes/auth");
+
+const mongoose = require("mongoose");
 
 /**
  * Database connection.
  */
 
-const connect = require("./utils/dbConnection");
-const User = require("./models/user");
+const MONGODB_URI = process.env.MONGODB_URI || "mongodb://localhost:27017/chat";
+
+mongoose
+  .connect(MONGODB_URI, {
+    useNewUrlParser: true,
+    useUnifiedTopology: true,
+  })
+  .then(() => console.log("Connected to MongoDB..."))
+  .catch(err => console.log(err));
 
 /**
  * Create collection where sessions will stored.
  */
-
-const { MONGODB_URI } = require("./constants");
 
 const store = new MongoDBStore({
   uri: MONGODB_URI,

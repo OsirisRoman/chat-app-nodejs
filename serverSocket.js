@@ -5,6 +5,16 @@ const ChatroomUsers = require("./socketClasses/chatroom-users");
 
 const chatRoomsData = [
   {
+    name: "NodeJS",
+    imageUrl:
+      "https://upload.wikimedia.org/wikipedia/commons/thumb/d/d9/Node.js_logo.svg/590px-Node.js_logo.svg.png",
+  },
+  {
+    name: "ReactJS",
+    imageUrl:
+      "https://upload.wikimedia.org/wikipedia/commons/thumb/4/47/React.svg/800px-React.svg.png",
+  },
+  {
     name: "MongoDB",
     imageUrl:
       "https://infinapps.com/wp-content/uploads/2018/10/mongodb-logo.png",
@@ -13,16 +23,6 @@ const chatRoomsData = [
     name: "ExpressJS",
     imageUrl:
       "https://manticore-labs.com/wp-content/uploads/2019/02/express.png",
-  },
-  {
-    name: "ReactJS",
-    imageUrl:
-      "https://upload.wikimedia.org/wikipedia/commons/thumb/4/47/React.svg/800px-React.svg.png",
-  },
-  {
-    name: "NodeJS",
-    imageUrl:
-      "https://upload.wikimedia.org/wikipedia/commons/thumb/d/d9/Node.js_logo.svg/590px-Node.js_logo.svg.png",
   },
   {
     name: "MERN",
