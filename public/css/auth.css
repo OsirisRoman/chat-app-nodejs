@@ -12,6 +12,30 @@
   margin: auto;
 }
 
+.landing {
+  display: flex;
+  justify-content: space-evenly;
+  flex-flow: wrap;
+}
+
+.info {
+  width: 35rem;
+  max-width: 95%;
+  margin: 1rem;
+  text-align: center;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+}
+
+.m-auto {
+  margin: auto;
+}
+
+.text-centered {
+  text-align: center;
+}
+
 @media (min-width: 768px) {
   .auth-form {
     width: 20rem;

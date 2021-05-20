@@ -1,24 +1,49 @@
 <%- include('../includes/head.ejs') %>
     <link rel="stylesheet" href="/css/form.css" />
     <link rel="stylesheet" href="/css/auth.css" />
+    <link rel="stylesheet" href="/css/home.css" />
 
     <%- include('../includes/navigation.ejs') %>
         <main>
-        <form class="login-form" action="/login" method="POST">
-            <h1 class="auth-title">Login Page</h1>
-            <% errors.forEach(error => {%>
-              <div class="user-message user-message--error"><%= error.msg %></div><br>
-            <% }); %>
-            <div class="auth-form">
-              <div class="form-control">
-                <input type="hidden" name="_csrf" value="<%= csrfToken %>"/>
-                <label for="email">E-Mail</label>
-                <input type="email" name="email" id="email" <%if(errors.find(error => error.msg === 'Email is not valid')){%>class="invalid"<%}%> <%if(oldValues){%>value="<%=oldValues.email%>"<%}%>/>
-                <label for="password">Password</label>
-                <input type="password" name="password" id="password" <%if(oldValues){%>value="<%=oldValues.password%>"<%}%>/>
+          <h1 class="card__actions">A Node.js Chat App 🎉.</h1>
+          <div class="landing">
+              <article class="card info">
+                  <h1>Description</h1>
+                  <div class="m-auto">
+                    <p class="card__content">A browser-based chat application using NodeJS.</p>
+                    <p class="card__content">This web app was made to detect the user session along different tabs. In order to test the app completely with two different users it is required the users login from different browsers.</p>
+                  </div>
+              </article>
+              <article class="card info">
+                  <h1>Credentials</h1>
+                  <div>
+                      <p>You can generate your own credentials with a fake email and password through the Signup form or use the testing credential.</p>
+                  </div>
+                  <div>
+                      <p><b>Username:</b> example@gmail.com</p>
+                      <p><b>Password:</b> 123456</p>
+                  </div>
+                  <div>
+                      <p><b>Username:</b> test@gmail.com</p>
+                      <p><b>Password:</b> 456789</p>
+                  </div>
+              </article>
+          </div>
+          <form class="login-form" action="/login" method="POST">
+              <h1 class="auth-title">Login Page</h1>
+              <% errors.forEach(error => {%>
+                <div class="user-message user-message--error"><%= error.msg %></div><br>
+              <% }); %>
+              <div class="auth-form">
+                <div class="form-control">
+                  <input type="hidden" name="_csrf" value="<%= csrfToken %>"/>
+                  <label for="email">E-Mail</label>
+                  <input type="email" name="email" id="email" <%if(errors.find(error => error.msg === 'Email is not valid')){%>class="invalid"<%}%> <%if(oldValues){%>value="<%=oldValues.email%>"<%}%>/>
+                  <label for="password">Password</label>
+                  <input type="password" name="password" id="password" <%if(oldValues){%>value="<%=oldValues.password%>"<%}%>/>
+                </div>
+                <button type="submit">Login</button><br>
               </div>
-              <button type="submit">Login</button><br>
-            </div>
-        </form>
+          </form>
         </main>
 <%- include('../includes/end.ejs') %>

@@ -43,6 +43,9 @@ const sessionMiddleware = session({
   resave: false,
   saveUninitialized: false,
   store,
+  cookie: {
+    maxAge: 3600000 * 5,
+  },
 });
 
 const app = express();
